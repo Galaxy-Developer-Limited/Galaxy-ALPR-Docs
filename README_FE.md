@@ -1,5 +1,52 @@
 # Galaxy ALPR System - Frontend Documentation
 
+---
+
+## Table of Contents
+
+1. **[Project Overview](#project-overview)**
+   - [Purpose](#purpose)
+   - [Tech Stack](#tech-stack)
+2. **[Core Architecture](#core-architecture)**
+   - [Application Structure](#application-structure)
+   - [Component Hierarchy](#component-hierarchy)
+3. **[Page Components](#page-components)**
+   - [Login Page](#1-login-page-galaxy-alpr-logintsx)
+   - [Home Page](#2-home-page-galaxy-alpr-dashboardtsx)
+   - [Result Page](#3-results-page-galaxy-alpr-resultstsx)
+   - [Statistics Page](#4-statistics-page-galaxy-alpr-statisticstsx)
+   - [History Page](#5-history-page-galaxy-alpr-historytsx)
+   - [Detection Configuration Page](#6-detection-configuration-page-galaxy-alpr-configtsx)
+   - [Documentation Page](#7-documentation-page-galaxy-alpr-documentationtsx)
+   - [User Management Page](#8-user-management-page-galaxy-alpr-userstsx)
+4. **[State Management Patterns](#state-management-patterns)**
+   - [Data Flow Patterns](#data-flow-patterns)
+   - [User Ineraction Flow](#user-interaction-flow)
+5. **[API Integration](#api-integration)**
+   - [Backend Communication](#backend-communication)
+   - [Error Handling Strategy](#error-handling-strategy)
+6. **[Performance Optimizations](#performance-optimizations)**
+   - [Component Optimizations](#component-optimization)
+   - [Data Processing](#data-processing)
+7. **[Development Setup](#development-setup)**
+   - [Prerequisites](#prerequisites)
+   - [Installation Steps](#installation-steps)
+   - [Project Structure](#project-structure)
+8. **[Configuration Options](#configuration-options)**
+   - [Detection Area Setup](#detection-area-setup)
+   - [Camera Integration](#camera-integration)
+   - [Access Control](#access-control)
+9. **[Deployment Considerations](#deployment-considerations)**
+   - [Production Build](#production-build)
+   - [Environment Variables](#environment-variables)
+   - [Security Considerations](#security-considerations)
+10. **[Future Enhancements](#future-enhancements)**
+    - [Planned Features](#planned-features)
+    - [Technical Improvements](#technical-improvements)
+11. **[License](#license)**
+
+---
+
 ## Project Overview
 
 <div align="center" style="display: flex; align-items: center; justify-content: center; height: 200px;">
@@ -7,7 +54,6 @@
   <span style="font-size: 24px; font-weight: bold; margin: 0 20px;">X</span>
   <img src="./public/assets/bss_parking_logo.png" alt="BSS Parking Logo" width="200" height="200">
 </div>
-
 
 The Galaxy ALPR System is a comprehensive **Automatic License Plate Recognition (ALPR)** application designed specifically for Indonesian vehicles. This modern web application provides real-time vehicle detection, license plate recognition, and parking management capabilities through an intuitive dashboard interface.
 
@@ -20,7 +66,7 @@ The Galaxy ALPR System is a comprehensive **Automatic License Plate Recognition 
 - **Configuration Management**: Advanced detection area setup and camera integration
 - **Access Control**: Blacklist/Whitelist management for enhanced security
 
-## Tech Stack
+### Tech Stack
 
 - **Frontend Framework**: React 19.1.0 with TypeScript 4.9.5
 - **Styling**: Tailwind CSS 3.3.0 (core utility classes only)
@@ -86,6 +132,7 @@ The Login Page serves as the authentication gateway to the Galaxy ALPR System, f
 #### Form Management
 
 **State Structure:**
+
 ```typescript
 const [formData, setFormData] = useState({
   username: "",
@@ -94,6 +141,7 @@ const [formData, setFormData] = useState({
 ```
 
 **Input Handling:**
+
 ```typescript
 const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const { name, value } = e.target;
@@ -107,13 +155,15 @@ const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 #### Authentication Flow
 
 **Current Implementation:**
+
 - Form validation is currently commented out for development ease
 - Direct navigation to dashboard upon submission
 - Console logging for debugging purposes
 
 **Prepared Validation Logic:**
+
 ```typescript
-if (!username || !username.endsWith('@gmail.com')) {
+if (!username || !username.endsWith("@gmail.com")) {
   errors.push("Username must end with '@gmail.com'.");
 }
 if (!password || password.length < 6) {
@@ -122,16 +172,17 @@ if (!password || password.length < 6) {
 ```
 
 **Navigation Integration:**
+
 ```typescript
 const handleSubmit = () => {
   const { username, password } = formData;
   const errors: string[] = [];
-  
+
   if (errors.length > 0) {
     alert(errors.join("\n"));
     return;
   }
-  
+
   console.log("Login attempt:", formData);
   navigate("/dashboard");
 };
@@ -140,11 +191,13 @@ const handleSubmit = () => {
 #### Security Considerations
 
 **Development vs Production:**
+
 - Validation logic prepared but disabled for development
 - Console logging for debugging (should be removed in production)
 - Form data structure ready for secure transmission
 
 **Future Enhancements:**
+
 - JWT token integration
 - Remember me functionality
 - Password strength validation
@@ -234,8 +287,8 @@ const handleProcessDetection = async () => {
 ### 3. Results Page (`galaxy-alpr-results.tsx`)
 
 <div align="center" style="display: flex; justify-content: center; gap: 20px;">
-  <img src=".\public\assets\ui_result_image_comparison.png" alt="Result Page UI - Image Comparison Tab" width="500" />
-  <img src=".\public\assets\ui_result_detection_details.png" alt="Result Page UI - Detection Details Tab" width="500" />
+  <img src=".\public\assets\ui_result_1.png" alt="Result Page UI" width="500" />
+  <img src=".\public\assets\ui_result_2.png" alt="Result Page UI" width="500" />
 </div>
 
 Advanced detection results display with comprehensive analysis and image comparison.
@@ -471,7 +524,9 @@ const exportToCSV = () => {
 ### 6. Detection Configuration Page (`galaxy-alpr-config.tsx`)
 
 <div align="center" style="display: flex; justify-content: center; gap: 20px;">
-  <img src=".\public\assets\ui_configuration.png" alt="Configuratuion Page UI" width="600" />
+  <img src=".\public\assets\ui_configuration_detection_area_setup_tab.png" alt="Configuratuion Page UI - Detection Area Setup Tab" width="500" />
+  <img src=".\public\assets\ui_configuration_access_list_management_tab.png" alt="Configuratuion Page UI - Access List Management Tab" width="500" />
+  <img src=".\public\assets\ui_configuration_location_management_tab.png" alt="Configuratuion Page UI - Location Management Tab" width="500" />
 </div>
 
 The main configuration interface with tabbed navigation for system setup.
@@ -599,18 +654,32 @@ const handleWindowPointerMove = useCallback((e: PointerEvent) => {
   <img src=".\public\assets\ui_documentation.png" alt="Documentation Page UI" width="600" />
 </div>
 
-Provides in-app reference for end-users and administrators.
+The Documentation page serves as an interactive guide for users and developers to understand and work with the Galaxy ALPR system. It includes a clean tabbed interface to switch between documentation categories, such as ALPR overview, API usage, AI/ML details, and integration steps.
 
 #### Documentation Content:
 
-- **System Overview**: Architecture and flow of vehicle detection and recognition
-- **User Guide**: Instructions for using each module:
-  - Dashboard
-  - History
-  - Statistics
-  - Detection Config
-- **Glossary**: Definitions of key terms like confidence score, plate types, region, etc.
-- **Support Info**: Links or instructions for reaching out to system admins
+The documentation is organized into 7 main tabs that guide users through every aspect of the Galaxy ALPR system:
+
+- **Overview**
+  Introduction to Galaxy ALPR, its purpose, key features, and supported vehicle/plate types.
+
+- **ALPR System**
+  Explanation of how the detection pipeline works, including image preprocessing, YOLO-based detection, OCR recognition, and result classification.
+
+- **REST API**
+  Describes available endpoints for detection, history retrieval, access list management, and camera configuration — including request/response examples.
+
+- **AI/ML Services**
+  Outlines the computer vision and machine learning models used (e.g., YOLOv8, OCR), model input/output formats, and tuning parameters.
+
+- **Frontend**
+  Highlights the client-side structure, core React components, state management, routing, and user interaction flow.
+
+- **Backend**
+  Describes the server-side architecture, FastAPI endpoints, authentication strategy, and response structure.
+
+- **Database**
+  Provides schema overview, key relationships (e.g., detections ↔ vehicles ↔ plates), indexing strategy, and retention policy.
 
 ### 8. User Management Page (`galaxy-alpr-users.tsx`)
 
@@ -715,7 +784,7 @@ flowchart LR
 
 ```
 
-## User Interaction Flow
+### User Interaction Flow
 
 ```mermaid
 sequenceDiagram
@@ -990,3 +1059,5 @@ REACT_APP_LOG_LEVEL=warn
 **React Version**: 19.1.0  
 **Last Updated**: June 2025  
 **Documentation Version**: 1.0
+
+[⬆️ Back to Top ⬆️](#galaxy-alpr-system---frontend-documentation)
