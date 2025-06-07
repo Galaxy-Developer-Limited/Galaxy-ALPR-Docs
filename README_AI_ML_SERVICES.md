@@ -1,4 +1,4 @@
-# Galaxy ALPR API Documentation
+# Galaxy ALPR AI/ML Services Documentation
 
 ## 📋 Table of Contents
 
